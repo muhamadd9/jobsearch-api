@@ -21,6 +21,8 @@ const authenticate = catchAsync(async (req, res, next) => {
     if (!user) {
       return next(new ErrorResponse("User not found. Access denied.", 401));
     }
+    if (user.bannedAt || user.deletedAt || user.deletedAt)
+      return next(new ErrorResponse("Your account has been deleted or banned. Please contact support.", 401));
 
     req.user = user;
 

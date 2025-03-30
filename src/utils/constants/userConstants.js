@@ -12,5 +12,9 @@ const genders = {
   male: "male",
   female: "female",
 };
+const otpType = {
+  confirmEmail: "confirmEmail",
+  forgetPassword: "forgetPassword",
+};
 
-export { roles, providers, genders };
+export { roles, providers, genders, otpType };

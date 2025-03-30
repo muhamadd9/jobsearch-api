@@ -9,10 +9,7 @@ const validate = (schema) => (req, res, next) => {
 
   if (error) {
     // Return validation errors
-    const errors = error.details.map((detail) => ({
-      field: detail.path.join("."),
-      message: detail.message,
-    }));
+    const errors = error.details.map((detail) => `${detail.message.split('"').join("")}`).join(" | ");
     return next(new ErrorResponse(errors, 400));
   }
 

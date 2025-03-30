@@ -71,7 +71,7 @@ const deleteMany = async ({ model = "", filter = {} }) => {
   return await model.deleteMany(filter);
 };
 
-export default {
+export {
   create,
   find,
   findOne,

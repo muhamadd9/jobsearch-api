@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { compareHash, generateHash } from "../../utils/security/hash.js";
 import { generateToken } from "../../utils/security/jwt.js";
-import { roles, providers, genders } from "../../utils/constants/userConstants.js";
+import { roles, providers, genders, otpType } from "../../utils/constants/userConstants.js";
 import { isOver18, isPastDate } from "../validators/userValidators.js";
 
 const userSchema = new mongoose.Schema(
@@ -87,7 +87,10 @@ const userSchema = new mongoose.Schema(
     OTP: [
       {
         code: String,
-        type: String,
+        otptype: {
+          type: String,
+          enum: Object.values(otpType),
+        },
         expiresIn: Date,
       },
     ],
@@ -115,7 +118,7 @@ userSchema.methods.comparePassword = function (enteredPassword) {
 
 /* Generate JWT Token */
 userSchema.methods.getSignedJwtToken = function () {
-  return generateToken({ payload: { id: this._id, role: this.role } });
+  return generateToken({ payload: { id: this._id, role: this.role }, options: { expiresIn: "1d" } });
 };
 
 /* Generate Refresh Token */
