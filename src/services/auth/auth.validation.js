@@ -28,3 +28,11 @@ export const resetPasswordSchema = Joi.object({
   otp: Joi.string().required().min(4).max(4),
   password: validationGeneraFields.password,
 });
+
+export const loginWithGoogleSchema = Joi.object({
+  idToken: Joi.string().required(),
+});
+
+export const newAcccessTokenSchema = Joi.object({
+  refreshToken: Joi.string().required(),
+});
