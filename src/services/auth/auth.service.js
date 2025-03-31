@@ -1,4 +1,4 @@
-import { create, findById, findOne } from "../../DB/dbHelper.js";
+import { create, findById, findOne, findOneAndUpdate } from "../../DB/dbHelper.js";
 import User from "../../DB/model/userModel.js";
 import { otpType } from "../../utils/constants/userConstants.js";
 import emailEvent from "../../utils/email/emailEvent.js";
@@ -63,6 +63,20 @@ export const login = catchAsync(async (req, res, next) => {
     },
     select: "+password",
   });
+
+  if (user.deletedAt) {
+    await findOneAndUpdate({
+      model: User,
+      filter: {
+        email,
+        isConfirmed: true,
+      },
+      data: {
+        $unset: { deletedAt: 1 },
+      },
+    });
+  }
+  if (user.bannedAt) return next(new ErrorResponse("Your account has been banned. Please contact support.", 401));
 
   if (!user) return next(new ErrorResponse("User not found. Access denied.", 401));
 

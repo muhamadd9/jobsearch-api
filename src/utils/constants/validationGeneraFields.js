@@ -1,9 +1,9 @@
 import Joi from "joi";
 
 export const validationGeneraFields = {
-  firstName: Joi.string().required(),
-  lastName: Joi.string().required(),
-  email: Joi.string().required(),
-  password: Joi.string().required(),
-  confirmPassword: Joi.string().required(),
+  firstName: Joi.string(),
+  lastName: Joi.string(),
+  email: Joi.string(),
+  password: Joi.string(),
+  confirmPassword: Joi.string().valid(Joi.ref("password")),
 };

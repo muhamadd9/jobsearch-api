@@ -3,6 +3,7 @@ import { compareHash, generateHash } from "../../utils/security/hash.js";
 import { generateToken } from "../../utils/security/jwt.js";
 import { roles, providers, genders, otpType } from "../../utils/constants/userConstants.js";
 import { isOver18, isPastDate } from "../validators/userValidators.js";
+import { decrypt, encrypt } from "../../utils/security/encryption.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -95,8 +96,16 @@ const userSchema = new mongoose.Schema(
       },
     ],
   },
-  { timestamps: true }
+  { timestamps: true, toObject: { virtuals: true } }
 );
+
+userSchema.set("toJSON", {
+  virtuals: true,
+  transform: (doc, ret) => {
+    if (ret.mobileNumber) ret.mobileNumber = decrypt({ ciphertext: ret.mobileNumber });
+    return ret;
+  },
+});
 
 // virtual userName field
 userSchema.virtual("userName").get(function () {

@@ -1,7 +1,7 @@
 import catchAsync from "../utils/response/catchAsync.js";
 import ErrorResponse from "../utils/response/errorResponse.js";
 import { verifyToken } from "../utils/security/jwt.js";
-import { findById } from "../DB/services/userService.js";
+import { findById } from "../DB/dbHelper.js";
 import userModel from "../DB/model/userModel.js";
 const authenticate = catchAsync(async (req, res, next) => {
   let token;
@@ -23,6 +23,10 @@ const authenticate = catchAsync(async (req, res, next) => {
     }
     if (user.bannedAt || user.deletedAt || user.deletedAt)
       return next(new ErrorResponse("Your account has been deleted or banned. Please contact support.", 401));
+
+    if (user.changeCredentialTime?.getTime() > decoded.iat * 1000) {
+      return next(new ErrorResponse("Session expired. Please log in again.", 401));
+    }
 
     req.user = user;
 
