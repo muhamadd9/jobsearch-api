@@ -168,7 +168,7 @@ export const loginWithGoogle = catchAsync(async (req, res, next) => {
   const payload = await verify();
   if (!payload) return next(new ErrorResponse("Invalid idtoken or audience mismatch", 401));
   const { email_verified, email, name, picture } = payload;
-  if (!email_verified) return next(new CustomError("Email is not verified", 400));
+  if (!email_verified) return next(new ErrorResponse("Email is not verified", 400));
 
   let user = await findOne({
     model: User,
