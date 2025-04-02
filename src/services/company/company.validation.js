@@ -31,7 +31,7 @@ export const deleteCompanySchema = Joi.object({
   id: Joi.string().required(),
 });
 
-export const getCompanySchema = deleteCompanySchema;
+export const getCompanySchema = deleteCompanySchema
 
 export const restoreCompanySchema = deleteCompanySchema;
 

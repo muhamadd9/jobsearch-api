@@ -1,6 +1,6 @@
 import { create, findById, findOne, findOneAndUpdate } from "../../DB/dbHelper.js";
 import User from "../../DB/model/userModel.js";
-import { otpType } from "../../utils/constants/userConstants.js";
+import { otpType, providers } from "../../utils/constants/userConstants.js";
 import emailEvent from "../../utils/email/emailEvent.js";
 import catchAsync from "../../utils/response/catchAsync.js";
 import ErrorResponse from "../../utils/response/errorResponse.js";
@@ -181,7 +181,14 @@ export const loginWithGoogle = catchAsync(async (req, res, next) => {
   if (!user) {
     user = await create({
       model: User,
-      data: { email, firstName: name.split(" ")[0], lastName: name.split(" ").slice(1), picture },
+      data: {
+        email,
+        firstName: name.split(" ")[0],
+        lastName: name.split(" ").slice(1),
+        picture,
+        isConfirmed: true,
+        provider: providers.google,
+      },
     });
   }
 

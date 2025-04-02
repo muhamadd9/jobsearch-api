@@ -45,12 +45,22 @@ router.post("/approve/:id", authorize(roles.admin), validate(approveCompanySchem
 router.patch("/:id", validate(updateCompanySchema), updateCompany);
 // Delete Company
 router.delete("/:id", validate(deleteCompanySchema), deleteCompany);
-// get Specific Company
-router.get("/:id", validate(getCompanySchema), getCompany);
-// Restore Company
-router.post("/restore/:id", validate(restoreCompanySchema), restoreCompany);
+
+
 // Search Company by name
 router.get("/search", validate(getCompanyByNameSchema), getCompanyByName);
+// get Specific Company
+router.get("/:id", validate(getCompanySchema), getCompany);
+
+
+// Restore Company
+router.post("/restore/:id", validate(restoreCompanySchema), restoreCompany);
+
+
+
+
+
+
 // Upload Company Logo
 router.patch(
   "/upload-logo/:id",
