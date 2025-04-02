@@ -3,7 +3,7 @@ import ErrorResponse from "../utils/response/errorResponse.js";
 const validate = (schema) => (req, res, next) => {
   const data = { ...req.body, ...req.params, ...req.query };
   if (req.file || req.files?.length) {
-    data.attachments = req.file || req.files;
+    data[req.file.fieldname] = req.file || req.files;
   }
   const { error } = schema.validate(data, { abortEarly: false });
 

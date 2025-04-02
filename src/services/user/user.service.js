@@ -1,6 +1,6 @@
 import { findById, findByIdAndUpdate, findOne } from "../../DB/dbHelper.js";
 import User from "../../DB/model/userModel.js";
-import { cloud } from "../../utils/multer/multer.js";
+import { cloud } from "../../utils/cloudinary/cloud.config.js";
 import catchAsync from "../../utils/response/catchAsync.js";
 import ErrorResponse from "../../utils/response/errorResponse.js";
 import { successResponse } from "../../utils/response/successResponse.js";

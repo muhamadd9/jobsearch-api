@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { validationGeneraFields } from "../../utils/constants/validationGeneraFields.js";
+import { fileSchema, validationGeneraFields } from "../../utils/constants/validationGeneraFields.js";
 import { genders } from "../../utils/constants/userConstants.js";
 
 export const updateProfileSchema = Joi.object({
@@ -18,4 +18,12 @@ export const updatePasswordSchema = Joi.object({
   oldPassword: validationGeneraFields.password.required(),
   newPassword: validationGeneraFields.password.required(),
   confirmPassword: Joi.string().valid(Joi.ref("newPassword")).required(),
+});
+
+export const updateProfilePicSchema = Joi.object({
+  profilePic: Joi.object(fileSchema).required(),
+});
+
+export const updateProfileCoverSchema = Joi.object({
+  coverPic: Joi.object(fileSchema).required(),
 });

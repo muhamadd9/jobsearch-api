@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Job from "./jobModel.js";
 
 const companySchema = new mongoose.Schema(
   {
@@ -16,7 +17,6 @@ const companySchema = new mongoose.Schema(
     address: {
       type: String,
     },
-    //numberOfEmployees ( must be range such as 11-20 employee)
     numberOfEmployees: {
       type: Number,
       min: 11,
@@ -61,9 +61,17 @@ const companySchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    toObject: { virtuals: true },
+    toJSON: { virtuals: true },
   }
 );
 
+// virtual populate 
+companySchema.virtual("jobs", {
+  ref: "Job",               
+  localField: "_id",       
+  foreignField: "company",  
+});
 const Company = mongoose.model("Company", companySchema);
 
 export default Company;

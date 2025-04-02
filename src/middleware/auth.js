@@ -21,7 +21,7 @@ const authenticate = catchAsync(async (req, res, next) => {
     if (!user) {
       return next(new ErrorResponse("User not found. Access denied.", 401));
     }
-    if (user.bannedAt || user.deletedAt || user.deletedAt)
+    if (user.bannedAt || user.deletedAtuser)
       return next(new ErrorResponse("Your account has been deleted or banned. Please contact support.", 401));
 
     if (user.changeCredentialTime?.getTime() > decoded.iat * 1000) {

@@ -1,3 +1,5 @@
+import ErrorResponse from "../utils/response/errorResponse.js";
+
 const authorize =
   (...roles) =>
   (req, res, next) => {
