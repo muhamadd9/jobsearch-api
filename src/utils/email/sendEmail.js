@@ -10,7 +10,7 @@ export const sendEmail = catchAsync(async ({ to = "", subject = "", text = "", h
   });
 
   const info = await transporter.sendMail({
-    from: '"Job Search App 👻" <jobsearch@gmail.com>',
+    from: '"Job Search App " <jobsearch@gmail.com>',
     to,
     subject,
     text,

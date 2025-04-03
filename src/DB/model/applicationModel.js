@@ -13,7 +13,7 @@ const applicationSchema = new mongoose.Schema(
       ref: "User",
       required: [true, "User is required"],
     },
-    userCV: {
+    resume: {
       secure_url: String,
       public_id: String,
     },
@@ -28,6 +28,6 @@ const applicationSchema = new mongoose.Schema(
   }
 );
 
-const Application = mongoose.model("Application") || mongoose.model("Application", applicationSchema);
+const Application = mongoose.models.Application || mongoose.model("Application", applicationSchema);
 
 export default Application;

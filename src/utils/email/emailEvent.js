@@ -56,4 +56,13 @@ emailEvent.on("sendForgetPassword", async (data) => {
   });
 });
 
+emailEvent.on("sendApplicationStatus", async (data) => {
+  const { email, status, jobTitle } = data;
+  await sendEmail({
+    to: email,
+    subject: "Application Status",
+    html: `<h1>Your application to ${jobTitle} has been ${status}.</h1>`,
+  });
+});
+
 export default emailEvent;
