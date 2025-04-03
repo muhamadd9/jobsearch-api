@@ -20,7 +20,13 @@ const find = async ({
     model.find(filter).populate(populate).select(select).skip(skip).limit(pageSize).sort(sort),
     model.countDocuments(filter),
   ]);
-  return { data, total, totalPages: Math.ceil(total / pageSize), currentPage: page };
+  return {
+    totalCount: total,
+    pageCount: data.length,
+    totalPages: Math.ceil(total / pageSize),
+    currentPage: page,
+    data,
+  };
 };
 
 const findOne = async ({ model = "", filter = {}, populate = [], select = "" }) => {

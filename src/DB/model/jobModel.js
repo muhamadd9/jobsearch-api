@@ -10,14 +10,17 @@ const jobSchema = new mongoose.Schema(
     jobLocation: {
       type: String,
       enum: Object.values(jobLocations),
+      required: [true, "jobLocation is required"],
     },
     workingTime: {
       type: String,
       enum: Object.values(workingTimes),
+      required: [true, "workingTime is required"],
     },
     seniorityLevel: {
       type: String,
       enum: Object.values(seniorityLevels),
+      required: [true, "seniorityLevel is required"],
     },
     jobDescription: {
       type: String,
@@ -49,6 +52,12 @@ const jobSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+jobSchema.virtual("applications", {
+  ref: "Application",
+  localField: "_id",
+  foreignField: "job",
+});
 
 const Job = mongoose.model("Job", jobSchema);
 

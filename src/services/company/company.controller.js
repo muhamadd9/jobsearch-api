@@ -28,7 +28,7 @@ import authorize from "../../middleware/authorize.js";
 import { roles } from "../../utils/constants/userConstants.js";
 import { fileValidations, uploadFile } from "../../utils/multer/multer.js";
 import uploadFileCloudinary from "../../utils/cloudinary/company.cloud.js";
-
+import jobRouter from "../job/job.controller.js";
 const router = Router();
 router.use(authenticate);
 
@@ -45,22 +45,12 @@ router.post("/approve/:id", authorize(roles.admin), validate(approveCompanySchem
 router.patch("/:id", validate(updateCompanySchema), updateCompany);
 // Delete Company
 router.delete("/:id", validate(deleteCompanySchema), deleteCompany);
-
-
 // Search Company by name
 router.get("/search", validate(getCompanyByNameSchema), getCompanyByName);
 // get Specific Company
 router.get("/:id", validate(getCompanySchema), getCompany);
-
-
 // Restore Company
 router.post("/restore/:id", validate(restoreCompanySchema), restoreCompany);
-
-
-
-
-
-
 // Upload Company Logo
 router.patch(
   "/upload-logo/:id",
@@ -81,5 +71,7 @@ router.patch(
 router.delete("/delete-logo/:id", deleteCompanyLogo);
 // Delete Company Cover
 router.delete("/delete-cover/:id", deleteCompanyCover);
+// get all jobs for company
+router.use("/:companyId/job", jobRouter);
 
 export default router;
