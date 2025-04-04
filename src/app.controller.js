@@ -10,14 +10,20 @@ import playground from "graphql-playground-middleware-express";
 import { createHandler } from "graphql-http/lib/use/express";
 import jobRouter from "./services/job/job.controller.js";
 import applicationRouter from "./services/application/application.controller.js";
+import rateLimiter from "./utils/security/rateLimit.js";
+import helmet from "helmet";
+
 const bootstrap = (app, express) => {
   connectDB();
 
+  app.use(cors());
+
   app.use(express.json());
 
+  app.use(helmet());
+  app.use(rateLimiter);
   app.use("/graphql/playground", playground.default({ endpoint: "/graphql" }));
   app.use("/graphql", createHandler({ schema }));
-  app.use(cors());
 
   app.use("/auth", authRouter);
   app.use("/user", userRouter);
