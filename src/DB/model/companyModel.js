@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Job from "./jobModel.js";
+import { deleteMany } from "../dbHelper.js";
 
 const companySchema = new mongoose.Schema(
   {
@@ -66,12 +67,19 @@ const companySchema = new mongoose.Schema(
   }
 );
 
-// virtual populate 
+// virtual populate
 companySchema.virtual("jobs", {
-  ref: "Job",               
-  localField: "_id",       
-  foreignField: "company",  
+  ref: "Job",
+  localField: "_id",
+  foreignField: "company",
 });
+
+// delete all jobs when company is deleted
+companySchema.pre("deleteOne",{document : false  , query : true} ,async function (next) {
+  await deleteMany({ model: Job, filter: { company: this._id } });
+  next();
+});
+
 const Company = mongoose.model("Company", companySchema);
 
 export default Company;

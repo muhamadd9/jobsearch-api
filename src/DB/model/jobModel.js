@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import { jobLocations, workingTimes, seniorityLevels } from "../../utils/constants/jobConstants.js";
+import { deleteMany } from "../dbHelper.js";
+import Application from "./applicationModel.js";
 
 const jobSchema = new mongoose.Schema(
   {
@@ -57,6 +59,12 @@ jobSchema.virtual("applications", {
   ref: "Application",
   localField: "_id",
   foreignField: "job",
+});
+
+// delete applications when job is deleted
+jobSchema.pre("deleteOne", { document: false, query: true }, async function (next) {
+  await deleteMany({ model: Application, filter: { job: this._id } });
+  next();
 });
 
 const Job = mongoose.model("Job", jobSchema);

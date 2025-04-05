@@ -135,6 +135,9 @@ userSchema.methods.getSignedRefreshToken = function () {
   return generateToken({ payload: { id: this._id, role: this.role }, options: { expiresIn: "7d" } });
 };
 
+/* Socket connection map */
+export const socketConnections = new Map();
+
 const User = mongoose.model("User", userSchema);
 
 export default User;

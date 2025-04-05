@@ -1,18 +1,22 @@
 import { create, find, findById } from "../../DB/dbHelper.js";
 import Application from "../../DB/model/applicationModel.js";
+import Company from "../../DB/model/companyModel.js";
 import Job from "../../DB/model/jobModel.js";
+import { socketConnections } from "../../DB/model/userModel.js";
 import { cloud } from "../../utils/cloudinary/cloud.config.js";
 import { applicationStatus } from "../../utils/constants/applicationConstants.js";
 import emailEvent from "../../utils/email/emailEvent.js";
 import catchAsync from "../../utils/response/catchAsync.js";
 import ErrorResponse from "../../utils/response/errorResponse.js";
 import { successResponse } from "../../utils/response/successResponse.js";
-
+import { io } from "../socket/socket.controller.js";
 /* Apply to Job */
 export const applyToJob = catchAsync(async (req, res, next) => {
   const { id: jobId } = req.params;
 
-  if (!(await findById({ model: Job, id: jobId }))) return next(new ErrorResponse("Job not found.", 404));
+  // check if job exists
+  const job = await findById({ model: Job, id: jobId });
+  if (!job) return next(new ErrorResponse("Job not found.", 404));
 
   let resume = null;
   if (req.file) {
@@ -24,6 +28,22 @@ export const applyToJob = catchAsync(async (req, res, next) => {
 
   const data = resume ? { job: jobId, user: req.user._id, resume } : { job: jobId, user: req.user._id };
   const application = await create({ model: Application, data });
+
+  // get the hrs of the company
+  const company = await findById({ model: Company, id: job.company });
+  if (!company) return next(new ErrorResponse("Company not found.", 404));
+  const HRs = company.HRs || [];
+
+  // send notification to all HRs of the company using socket
+  HRs.forEach((hr) => {
+    const socketId = socketConnections.get(hr._id.toString());
+    if (socketId) {
+      io.to(socketId).emit("newApplication", {
+        message: "New application received",
+        application,
+      });
+    }
+  });
 
   // send notification to job owner emit socket
 
